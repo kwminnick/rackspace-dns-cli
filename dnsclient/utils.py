@@ -79,6 +79,31 @@ def import_class(import_str):
     __import__(mod_str)
     return getattr(sys.modules[mod_str], class_str)
 
+def print_list(objs, fields, formatters={}, sortby_index=0):
+    if sortby_index == None:
+        sortby = None
+    else:
+        sortby = fields[sortby_index]
+    mixed_case_fields = ['serverId', 'emailAddress']
+    pt = prettytable.PrettyTable([f for f in fields], caching=False)
+    pt.align = 'l'
+
+    for o in objs:
+        row = []
+        for field in fields:
+            if field in formatters:
+                row.append(formatters[field](o))
+            else:
+                if field in mixed_case_fields:
+                    field_name = field.replace(' ', '_')
+                else:
+                    field_name = field.lower().replace(' ', '_')
+                data = getattr(o, field_name, '')
+                row.append(data)
+        pt.add_row(row)
+
+    print pt.get_string(sortby=sortby)
+
 def print_dict(d, dict_property="Property"):
     pt = prettytable.PrettyTable([dict_property, 'Value'], caching=False)
     pt.align = 'l'

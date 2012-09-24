@@ -40,6 +40,14 @@ class DomainManager(base.ManagerWithFind):
     
     resource_class = Domain
     
+    def limits(self):
+        """
+        Get current limits.
+        
+        :rtype: :class:`rates`
+        """
+        return self._get("/limits", "")
+    
     def list(self):
         """
         Get a list of all domains.
@@ -56,6 +64,15 @@ class DomainManager(base.ManagerWithFind):
         :rtype: :class:`Domain`
         """
         return self._get("/domains/%s" % base.getid(domain), "domain")  
+    
+    def export(self, domain):
+        """
+        Export a specific domain.
+        
+        :param domain: The ID of the :class:`Domain` to get.
+        :rtype: :class:`Domain`
+        """
+        return self._get_async("/domains/%s/export" % base.getid(domain), "")
     
     def delete(self, domain):
         """

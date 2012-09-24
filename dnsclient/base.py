@@ -22,6 +22,7 @@ Base utilities to build API operation managers and objects on top of.
 import contextlib
 import hashlib
 import os
+import time
 
 from dnsclient import exceptions
 from dnsclient import utils
@@ -127,6 +128,14 @@ class Manager(utils.HookableMixin):
         if cache:
             cache.write("%s\n" % val)
 
+    def _get_async(self, url, response_key=None):
+        async_resp = self._get(url, "")
+        while async_resp.status == "RUNNING":
+            time.sleep(1)
+            async_resp = self._get("/status/%s" % async_resp.jobId, "")
+        
+        return self._get("/status/%s?showDetails=true" % async_resp.jobId, "response")
+        
     def _get(self, url, response_key=None):
         _resp, body = self.api.client.get(url)
         if response_key:

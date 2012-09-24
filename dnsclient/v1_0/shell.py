@@ -18,10 +18,30 @@
 
 from dnsclient import utils
 
+def do_domain_list(cs, args):
+    """Print a list of available domains."""
+    domain_list = cs.domains.list()
+    columns = ['ID', 'Name', 'emailAddress']
+    utils.print_list(domain_list, columns)
+    
 @utils.arg('domain',
-     metavar='<domainId>',
-     help="id of domain")
+     metavar='<domain>',
+     help="name of domain")
 def do_domain(cs, args):
     """Show details about the given domain"""
     domain = utils.find_resource(cs.domains, args.domain)
     utils.print_dict(domain._info)
+
+@utils.arg('domain',
+           metavar='<domain>',
+           help="name of domain")
+def do_domain_export(cs, args):
+    """Export details of the specified domain."""
+    domain = utils.find_resource(cs.domains, args.domain)
+    domain = cs.domains.export(domain.id)
+    utils.print_dict(domain._info)
+
+def do_limits(cs, args):
+    """List all applicable limits."""
+    limits = cs.domains.limits()
+    utils.print_dict(limits._info)
