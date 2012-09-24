@@ -45,3 +45,24 @@ def do_limits(cs, args):
     """List all applicable limits."""
     limits = cs.domains.limits()
     utils.print_dict(limits._info)
+
+@utils.arg('name',
+           metavar='name',
+           help="Specifies the name for the domain or subdomain. Must be a valid domain name.")
+@utils.arg('--email-address',
+           metavar='<email-address>',
+           required=True,
+           help="Email address to use for contacting the domain administrator.")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_domain_create(cs, args):
+    """Create a new domain."""
+    domain = cs.domains.create(args)
+    utils.print_dict(domain._info)
+    

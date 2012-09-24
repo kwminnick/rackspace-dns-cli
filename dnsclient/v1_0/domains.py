@@ -81,3 +81,26 @@ class DomainManager(base.ManagerWithFind):
         :param domain: The ID of the :class:`Domain` to delete.
         """
         self._delete("/domains/%s" % base.getid(domain))
+        
+    def create(self, args):
+        """
+        Create a domain in the dns system.  The following parameters are
+        optional, except for name and email_address.
+        
+        :param name: str
+        :param email_address: str
+        :param ttl: int
+        :param comment: str
+        
+        :rtype: list of :class:`Domain`
+        """
+        
+        body = {
+            "domains" : [ {
+                "name" : args.name,
+                "comment" : args.comment,
+                "ttl" : int(args.ttl),
+                "emailAddress" : args.email_address                
+            } ]
+        }
+        return self._create_async('/domains', body, return_raw=False, response_key="")

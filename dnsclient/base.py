@@ -130,11 +130,18 @@ class Manager(utils.HookableMixin):
 
     def _get_async(self, url, response_key=None):
         async_resp = self._get(url, "")
+        n = 0
         while async_resp.status == "RUNNING":
             time.sleep(1)
             async_resp = self._get("/status/%s" % async_resp.jobId, "")
-        
-        return self._get("/status/%s?showDetails=true" % async_resp.jobId, "response")
+            n = n+1
+            if n > 10:
+                break
+ 
+        if async_resp.status == "ERROR":
+            return self._get("/status/%s?showDetails=true" % async_resp.jobId, "error")
+        else:
+            return self._get("/status/%s?showDetails=true" % async_resp.jobId, "response")
         
     def _get(self, url, response_key=None):
         _resp, body = self.api.client.get(url)
@@ -143,15 +150,24 @@ class Manager(utils.HookableMixin):
         else:
             return self.resource_class(self, body, loaded=True)
 
+    def _create_async(self, url, body, response_key, return_raw=False, **kwargs):
+        async_resp = self._create(url, body, response_key, return_raw, **kwargs)
+        time.sleep(1)
+        return self._get_async("/status/%s" % async_resp.jobId, "")
+
     def _create(self, url, body, response_key, return_raw=False, **kwargs):
         self.run_hooks('modify_body_for_create', body, **kwargs)
         _resp, body = self.api.client.post(url, body=body)
         if return_raw:
             return body[response_key]
 
-        with self.completion_cache('human_id', self.resource_class, mode="a"):
-            with self.completion_cache('uuid', self.resource_class, mode="a"):
-                return self.resource_class(self, body[response_key])
+        if response_key:
+            with self.completion_cache('human_id', self.resource_class, mode="a"):
+                with self.completion_cache('uuid', self.resource_class, mode="a"):
+                    return self.resource_class(self, body[response_key])
+        else:
+            return self.resource_class(self, body, loaded=True)
+        
 
     def _delete(self, url):
         _resp, _body = self.api.client.delete(url)
