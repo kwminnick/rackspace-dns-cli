@@ -1,3 +1,4 @@
+dnsclient/versioninfo
 .project
 .pydevproject
 *.py[co]

@@ -24,7 +24,7 @@ def read_file(file_name):
 
 setuptools.setup(
     name="rackspace-dnsclient",
-    version=setup.get_post_version('rackdns'),
+    version=setup.get_post_version('dnsclient'),
     author="Kevin Minnick, based on work by Jacob Kaplan-Moss, OpenStack LLC",
     author_email="kwminnick@gmail.com",
     description="Client library for Rackspace DNS API.",
