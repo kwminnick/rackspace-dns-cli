@@ -3,3 +3,4 @@ httplib2
 iso8601>=0.1.4
 prettytable>=0.6,<0.7
 simplejson
+rackspace-auth-openstack
