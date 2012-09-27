@@ -26,9 +26,8 @@ Or set them as an environment variables as well::
     export OS_AUTH_URL=http://auth.api.rackspacecloud.com/v2.0/
     export NOVA_RAX_AUTH=1
 
-You'll find the complete documentation on the shell by running ``rackdns help``:
-(the Rackspace DNS api has many more features, not all implemented here yet)
-``
+You'll find the complete documentation on the shell by running ``rackdns help``::
+
 usage: rackdns [--version] [--debug] [--os-username <auth-user-name>]
                [--os-password <auth-password>]
                [--os-tenant-name <auth-tenant-name>]
@@ -69,4 +68,3 @@ Optional arguments:
                         option should be used with caution.
 
 See "rackdns help COMMAND" for help on a specific command.
-``
