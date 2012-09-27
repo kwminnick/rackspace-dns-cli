@@ -32,8 +32,7 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
 	               [--os-password <auth-password>]
 	               [--os-tenant-name <auth-tenant-name>]
 	               [--os-auth-url <auth-url>]
-	               [--os-compute-api-version <compute-api-ver>] [--no-cache]
-	               [--insecure]
+	               [--no-cache] [--insecure]
  	              <subcommand> ...
 	
 	Command-line interface to the Rackspace DNS API.
