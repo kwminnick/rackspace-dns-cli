@@ -63,7 +63,7 @@ class DomainManager(base.ManagerWithFind):
         :param domain: The ID of the :class:`Domain` to get.
         :rtype: :class:`Domain`
         """
-        return self._get("/domains/%s" % base.getid(domain), "domain")  
+        return self._get("/domains/%s" % base.getid(domain), "")  
     
     def export(self, domain):
         """

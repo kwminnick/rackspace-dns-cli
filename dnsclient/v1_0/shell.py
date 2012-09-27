@@ -16,6 +16,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import json
+
 from dnsclient import utils
 
 def do_domain_list(cs, args):
@@ -27,10 +29,11 @@ def do_domain_list(cs, args):
 @utils.arg('domain',
      metavar='<domain>',
      help="name of domain")
-def do_domain(cs, args):
+def do_domain_show(cs, args):
     """Show details about the given domain"""
-    domain = utils.find_resource(cs.domains, args.domain)
-    utils.print_dict(domain._info)
+    domainId = utils.find_resource(cs.domains, args.domain)
+    domain = cs.domains.get(domainId)
+    print json.dumps(domain._info, sort_keys=True, indent=4)
 
 @utils.arg('domain',
            metavar='<domain>',
