@@ -74,3 +74,22 @@ def do_domain_delete(cs, args):
     domain = utils.find_resource(cs.domains, args.domain)
     cs.domains.delete(domain.id)
 
+@utils.arg('domain',
+     metavar='<domain>',
+     help="name of domain")
+@utils.arg('--email-address',
+           metavar='<email-address>',
+           help="Email address to use for contacting the domain administrator.")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_domain_modify(cs, args):
+    """Modify a domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    domain = cs.domains.modify(args, domainId)
+    #utils.print_dict(domain._info)

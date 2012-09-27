@@ -104,3 +104,23 @@ class DomainManager(base.ManagerWithFind):
             } ]
         }
         return self._create_async('/domains', body, return_raw=False, response_key="")
+
+    def modify(self, args, domainId):
+        """
+        Modify a domain in the dns system.  The following parameters are
+        optional, except for name.
+        
+        :param name: str
+        :param email_address: str
+        :param ttl: int
+        :param comment: str
+        
+        :rtype: list of :class:`Domain`
+        """
+        
+        body = {
+            "comment" : args.comment,
+            "ttl" : int(args.ttl),
+            "emailAddress" : args.email_address                
+        }
+        return self._update('/domains/%s' % base.getid(domainId), body, return_raw=False, response_key="")
