@@ -66,3 +66,11 @@ def do_domain_create(cs, args):
     domain = cs.domains.create(args)
     utils.print_dict(domain._info)
     
+@utils.arg('domain',
+           metavar='<domain>',
+           help="name of domain")
+def do_domain_delete(cs, args):
+    """Delete a domain by name."""
+    domain = utils.find_resource(cs.domains, args.domain)
+    cs.domains.delete(domain.id)
+
