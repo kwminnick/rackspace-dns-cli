@@ -108,15 +108,7 @@ class RackDNSShell(object):
             help='Defaults to env[OS_AUTH_URL].')
         parser.add_argument('--os_auth_url',
             help=argparse.SUPPRESS)
-        
-        parser.add_argument('--os-compute-api-version',
-            metavar='<compute-api-ver>',
-            default=utils.env('OS_COMPUTE_API_VERSION',
-                default=DEFAULT_OS_COMPUTE_API_VERSION),
-            help='Accepts 1.0, defaults to env[OS_COMPUTE_API_VERSION].')
-        parser.add_argument('--os_compute_api_version',
-            help=argparse.SUPPRESS)
-        
+                
         parser.add_argument('--no-cache',
             default=utils.env('OS_NO_CACHE', default=False),
             action='store_true',
@@ -239,7 +231,7 @@ class RackDNSShell(object):
                             "default url with --os-auth-system "
                             "or env[OS_AUTH_SYSTEM")
         
-        self.cs = client.Client(options.os_compute_api_version, os_username,
+        self.cs = client.Client("1.0", os_username,
                 os_password, os_tenant_name, os_auth_url, insecure,
                 no_cache=no_cache, http_log_debug=options.debug)
         
