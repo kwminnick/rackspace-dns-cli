@@ -66,4 +66,4 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
 	                        verified against any certificate authorities. This
 	                        option should be used with caution.
 
-See "rackdns help COMMAND" for help on a specific command.
+	See "rackdns help COMMAND" for help on a specific command.
