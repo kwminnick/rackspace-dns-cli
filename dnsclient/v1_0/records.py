@@ -80,7 +80,7 @@ class RecordManager(base.ManagerWithFind):
         Modify a record in the dns system.  The following parameters are
         required recordId and name.
         
-        :param recordId: str
+        :param record_id: str
         :param domain: str
         :param name: str
         :param ttl: int
@@ -98,4 +98,13 @@ class RecordManager(base.ManagerWithFind):
             "data" : args.data,
             "priority" : args.priority                
         }
-        return self._update('/domains/%s/records/%s' % (base.getid(domainId), base.getid(args.recordId) ) , body, return_raw=False, response_key="")
+        return self._update('/domains/%s/records/%s' % (base.getid(domainId), base.getid(args.record_id)) , body, return_raw=False, response_key="")
+
+    def delete(self, domainId, recordId):
+        """
+        Delete a specific record.
+
+        :param domainId: The ID of the :class:`Domain` to delete.
+        :param recordId: The ID of the :class:`Record` to delete.
+        """
+        self._delete("/domains/%s/records/%s" % (base.getid(domainId), base.getid(recordId)))

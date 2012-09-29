@@ -155,8 +155,8 @@ def do_record_create(cs, args):
            metavar='<name>',
            required=True,
            help="The full name of the new record (ftp.example.com)")
-@utils.arg('--recordId',
-           metavar='<recordId>',
+@utils.arg('--record_id',
+           metavar='<record_id>',
            required=True,
            help="The id of the record to modify.")
 @utils.arg('--data',
@@ -178,3 +178,15 @@ def do_record_modify(cs, args):
     """Modify a record of the specified domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
     cs.records.modify(args, domainId)
+
+@utils.arg('domain',
+           metavar='domain',
+           help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
+@utils.arg('--record_id',
+           metavar='<record_id>',
+           required=True,
+           help="The id of the record to modify.")
+def do_record_delete(cs, args):
+    """Delete a record of the specified domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    cs.records.delete(domainId, args.record_id)
