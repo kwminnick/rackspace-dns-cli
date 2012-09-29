@@ -124,3 +124,11 @@ class DomainManager(base.ManagerWithFind):
             "emailAddress" : args.email_address                
         }
         return self._update('/domains/%s' % base.getid(domainId), body, return_raw=False, response_key="")
+
+    def subdomains_list(self, domainId):
+        """
+        Get a list of all subdomains.
+
+        :rtype: list of :class:`Domain`.
+        """
+        return self._list("/domains/%s/subdomains" % base.getid(domainId), "domains")

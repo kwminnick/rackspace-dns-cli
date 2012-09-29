@@ -47,7 +47,7 @@ def do_domain_export(cs, args):
 def do_limits(cs, args):
     """List all applicable limits."""
     limits = cs.domains.limits()
-    utils.print_dict(limits._info)
+    print json.dumps(limits._info, sort_keys=True, indent=4)
 
 @utils.arg('name',
            metavar='name',
@@ -96,3 +96,13 @@ def do_domain_modify(cs, args):
     domainId = utils.find_resource(cs.domains, args.domain)
     domain = cs.domains.modify(args, domainId)
     #utils.print_dict(domain._info)
+    
+@utils.arg('domain',
+           metavar='<domain>',
+           help="name of domain")
+def do_subdomains_list(cs, args):
+    """Print a list of available sub-domains for the given domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    domain_list = cs.domains.subdomains_list(domainId)
+    columns = ['ID', 'Name', 'emailAddress']
+    utils.print_list(domain_list, columns)

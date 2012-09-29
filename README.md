@@ -46,8 +46,10 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
     		domain-modify       Modify a domain.
     		domain-show         Show details about the given domain
     		limits              List all applicable limits.
+    		subdomains-list     Print a list of available sub-domains for the given
+                        		domain.
     		help                Display help about this program or one of its
-	                        subcommands.
+	                        	subcommands.
 	
 	Optional arguments:
 	  --version             show program's version number and exit
