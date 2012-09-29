@@ -100,9 +100,19 @@ def do_domain_modify(cs, args):
 @utils.arg('domain',
            metavar='<domain>',
            help="name of domain")
-def do_subdomains_list(cs, args):
+def do_subdomain_list(cs, args):
     """Print a list of available sub-domains for the given domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
     domain_list = cs.domains.subdomains_list(domainId)
     columns = ['ID', 'Name', 'emailAddress']
     utils.print_list(domain_list, columns)
+    
+@utils.arg('domain',
+           metavar='<domain>',
+           help="name of domain")
+def do_record_list(cs, args):
+    """Print a list of records for the given domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    record_list = cs.records.list(domainId)
+    columns = ['ID', 'Name', 'Type', "Data", "TTL"]
+    utils.print_list(record_list, columns)

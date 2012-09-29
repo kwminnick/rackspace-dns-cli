@@ -17,6 +17,7 @@
 from dnsclient import client
 
 from dnsclient.v1_0 import domains
+from dnsclient.v1_0 import records
 
 class Client(object):
     """
@@ -40,6 +41,7 @@ class Client(object):
                   auth_system='keystone'):
         
         self.domains = domains.DomainManager(self)
+        self.records = records.RecordManager(self)
         
         self.client = client.HTTPClient(username,
                                     password,
