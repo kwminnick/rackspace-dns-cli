@@ -47,3 +47,30 @@ class RecordManager(base.ManagerWithFind):
         :rtype: list of :class:`Record`.
         """
         return self._list("/domains/%s/records" % base.getid(domainId), "records")
+    
+    def create(self, args, domainId):
+        """
+        Create a record in the dns system.  The following parameters are
+        required type, name, data.
+        
+        :param type: str
+        :param name: str
+        :param ttl: int
+        :param data: str
+        :param priority: int
+        :param comment: str
+        
+        :rtype: list of :class:`Record`
+        """
+        
+        body = {
+            "records" : [ {
+                "name" : args.name,
+                "comment" : args.comment,
+                "ttl" : int(args.ttl),
+                "type" : args.type,
+                "data" : args.data,
+                "priority" : args.priority                
+            } ]
+        }
+        return self._create_async('/domains/%s/records' % base.getid(domainId), body, return_raw=False, response_key="")

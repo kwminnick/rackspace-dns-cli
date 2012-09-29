@@ -46,6 +46,7 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
     		domain-modify       Modify a domain.
     		domain-show         Show details about the given domain
     		limits              List all applicable limits.
+    		record-create       Add new record to the specified domain.
     		record-list         Print a list of records for the given domain.
     		subdomain-list      Print a list of available sub-domains for the given
                         		domain.

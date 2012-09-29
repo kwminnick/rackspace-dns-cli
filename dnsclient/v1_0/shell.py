@@ -67,7 +67,7 @@ def do_limits(cs, args):
 def do_domain_create(cs, args):
     """Create a new domain."""
     domain = cs.domains.create(args)
-    utils.print_dict(domain._info)
+    print json.dumps(domain._info, sort_keys=True, indent=4)
     
 @utils.arg('domain',
            metavar='<domain>',
@@ -94,8 +94,7 @@ def do_domain_delete(cs, args):
 def do_domain_modify(cs, args):
     """Modify a domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
-    domain = cs.domains.modify(args, domainId)
-    #utils.print_dict(domain._info)
+    cs.domains.modify(args, domainId)
     
 @utils.arg('domain',
            metavar='<domain>',
@@ -114,5 +113,37 @@ def do_record_list(cs, args):
     """Print a list of records for the given domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
     record_list = cs.records.list(domainId)
-    columns = ['ID', 'Name', 'Type', "Data", "TTL"]
+    columns = ['ID', 'Name', 'Type', "Data", "TTL", "Priority", "Comment"]
     utils.print_list(record_list, columns)
+    
+@utils.arg('domain',
+           metavar='name',
+           help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
+@utils.arg('--name',
+           metavar='<name>',
+           required=True,
+           help="The full name of the new record (ftp.example.com)")
+@utils.arg('--type',
+           metavar='<type>',
+           required=True,
+           help="Specifies the record type to add (A, AAAA, CNAME, MX, NS, PTR, SRV, TXT).")
+@utils.arg('--data',
+           metavar='<data>',
+           required=True,
+           help="The data field for PTR, A, and AAAA records must be a valid IPv4 or IPv6 IP address")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--priority',
+           metavar='<priority>',
+           help="Required for MX and SRV records, but forbidden for other record types. If specified, must be an integer from 0 to 65535.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_record_create(cs, args):
+    """Add new record to the specified domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    record = cs.records.create(args, domainId)
+    print json.dumps(record._info, sort_keys=True, indent=4)
