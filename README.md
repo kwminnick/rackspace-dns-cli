@@ -48,6 +48,7 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
     		limits              List all applicable limits.
     		record-create       Add new record to the specified domain.
     		record-list         Print a list of records for the given domain.
+    		record-modify       Modify a record of the specified domain.
     		subdomain-list      Print a list of available sub-domains for the given
                         		domain.
     		help                Display help about this program or one of its

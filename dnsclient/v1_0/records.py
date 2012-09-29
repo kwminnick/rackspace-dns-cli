@@ -74,3 +74,28 @@ class RecordManager(base.ManagerWithFind):
             } ]
         }
         return self._create_async('/domains/%s/records' % base.getid(domainId), body, return_raw=False, response_key="")
+
+    def modify(self, args, domainId):
+        """
+        Modify a record in the dns system.  The following parameters are
+        required recordId and name.
+        
+        :param recordId: str
+        :param domain: str
+        :param name: str
+        :param ttl: int
+        :param data: str
+        :param priority: int
+        :param comment: str
+        
+        :rtype: list of :class:`Record`
+        """
+        
+        body = {
+            "name" : args.name,
+            "comment" : args.comment,
+            "ttl" : int(args.ttl),
+            "data" : args.data,
+            "priority" : args.priority                
+        }
+        return self._update('/domains/%s/records/%s' % (base.getid(domainId), base.getid(args.recordId) ) , body, return_raw=False, response_key="")

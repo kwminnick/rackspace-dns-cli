@@ -143,7 +143,38 @@ def do_record_list(cs, args):
            metavar='<comment>',
            help="If included, its length must be less than or equal to 160 characters.")
 def do_record_create(cs, args):
-    """Add new record to the specified domain."""
+    """Add a record to the specified domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
     record = cs.records.create(args, domainId)
     print json.dumps(record._info, sort_keys=True, indent=4)
+
+@utils.arg('domain',
+           metavar='domain',
+           help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
+@utils.arg('--name',
+           metavar='<name>',
+           required=True,
+           help="The full name of the new record (ftp.example.com)")
+@utils.arg('--recordId',
+           metavar='<recordId>',
+           required=True,
+           help="The id of the record to modify.")
+@utils.arg('--data',
+           metavar='<data>',
+           required=True,
+           help="The data field for PTR, A, and AAAA records must be a valid IPv4 or IPv6 IP address")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--priority',
+           metavar='<priority>',
+           help="Required for MX and SRV records, but forbidden for other record types. If specified, must be an integer from 0 to 65535.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_record_modify(cs, args):
+    """Modify a record of the specified domain."""
+    domainId = utils.find_resource(cs.domains, args.domain)
+    cs.records.modify(args, domainId)
