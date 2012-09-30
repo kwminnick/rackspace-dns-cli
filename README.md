@@ -8,6 +8,13 @@ The guts of the code has been copied from the python-novaclient project.
 You should read the Rackspace DNS documetation at
 http://docs.rackspace.com/
 
+Quick Install:
+	- Download
+	- Make sure you have python-setuptools (yum install python-setuptools)
+	- python setup.py install
+	- (export variables below, or specify command line options)
+	- `rackdns help`
+
 Installing this package gets you a shell command, ``rackdns``, that you
 can use to interact with the Rackspace DNS API.
 
