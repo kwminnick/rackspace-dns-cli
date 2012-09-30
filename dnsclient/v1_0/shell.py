@@ -117,7 +117,7 @@ def do_record_list(cs, args):
     utils.print_list(record_list, columns)
     
 @utils.arg('domain',
-           metavar='name',
+           metavar='domain',
            help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
 @utils.arg('--name',
            metavar='<name>',
@@ -190,3 +190,85 @@ def do_record_delete(cs, args):
     """Delete a record of the specified domain."""
     domainId = utils.find_resource(cs.domains, args.domain)
     cs.records.delete(domainId, args.record_id)
+
+@utils.arg('domain',
+           metavar='domain',
+           help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
+@utils.arg('--name',
+           metavar='<name>',
+           required=True,
+           help="The full name of the new record (ftp.example.com)")
+@utils.arg('--data',
+           metavar='<data>',
+           required=True,
+           help="The data field, must be a valid IPv4 or IPv6 IP address")
+@utils.arg('--server-href',
+           metavar='<server_href>',
+           required=True,
+           help="The link to the Rackspace Cloud Server that this will reference.")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_rdns_create(cs, args):
+    """Add a reverse DNS record to the specified domain."""
+    args.priority = None
+    args.type = "PTR"
+    do_record_create(cs, args)
+
+@utils.arg('href',
+           metavar='href',
+           help="The link to the Rackspace Cloud Server that this will reference.")    
+def do_rdns_list(cs, args):
+    """List all PTR records configured for the specified Cloud Server."""
+    record_list = cs.records.rdns_list(args.href)
+    columns = ['ID', 'Name', 'Type', "Data", "TTL", "Comment"]
+    utils.print_list(record_list, columns)
+    
+@utils.arg('domain',
+           metavar='domain',
+           help="Specifies the domain or subdomain. Must be a valid existing domain (example.com)")
+@utils.arg('--record-id',
+           metavar='<record_id>',
+           required=True,
+           help="The id of the PTR record to modify.")
+@utils.arg('--name',
+           metavar='<name>',
+           required=True,
+           help="The full name of the new record (ftp.example.com)")
+@utils.arg('--data',
+           metavar='<data>',
+           required=True,
+           help="The data field, must be a valid IPv4 or IPv6 IP address")
+@utils.arg('--server-href',
+           metavar='<server_href>',
+           required=True,
+           help="The link to the Rackspace Cloud Server that this will reference.")
+@utils.arg('--ttl',
+           default=3600,
+           metavar='<ttl>',
+           help="If specified, must be greater than 300. The default value, if not specified, is 3600.")
+@utils.arg('--comment',
+           default=None,
+           metavar='<comment>',
+           help="If included, its length must be less than or equal to 160 characters.")
+def do_rdns_modify(cs, args):
+    """Modify a reverse DNS record to the specified domain."""
+    args.priority = None
+    args.type = "PTR"
+    do_record_modify(cs, args)
+
+@utils.arg('href',
+           metavar='href',
+           help="The link to the Rackspace Cloud Server that this will reference.")
+@utils.arg('--ip',
+           metavar='<ip>',
+           default="",
+           help="Use the optional ip parameter to specify a specific record to delete.  Omitting this parameter removes all PTR records associated with the specified device.")    
+def do_rdns_delete(cs, args):
+    """Remove one or all PTR records associated with a Rackspace Cloud device.  Use the optional ip parameter to specify a specific record to delete.  Omitting this parameter removes all PTR records associated with the specified device."""
+    cs.records.rdns_delete(args.href, args.ip)

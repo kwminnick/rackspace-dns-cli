@@ -46,6 +46,15 @@ You'll find the complete documentation on the shell by running ``rackdns help``:
     		domain-modify       Modify a domain.
     		domain-show         Show details about the given domain
     		limits              List all applicable limits.
+    		rdns-create         Add a reverse DNS record to the specified domain.
+    		rdns-delete         Remove one or all PTR records associated with a
+                        		Rackspace Cloud device. Use the optional ip parameter
+                        		to specify a specific record to delete. Omitting this
+                        		parameter removes all PTR records associated with the
+                        		specified device.
+    		rdns-list           List all PTR records configured for the specified
+                        		Cloud Server.
+    		rdns-modify         Modify a reverse DNS record to the specified domain.
     		record-create       Add new record to the specified domain.
     		record-delete       Delete a record of the specified domain.
     		record-list         Print a list of records for the given domain.

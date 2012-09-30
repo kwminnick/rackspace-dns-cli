@@ -73,7 +73,28 @@ class RecordManager(base.ManagerWithFind):
                 "priority" : args.priority                
             } ]
         }
-        return self._create_async('/domains/%s/records' % base.getid(domainId), body, return_raw=False, response_key="")
+        url = '/domains/%s/records' % base.getid(domainId)
+        
+        if args.type == "PTR":
+            url = '/rdns'
+            body = {
+                "recordsList" : {
+                    "records" : [ {
+                                   "name" : args.name,
+                                   "comment" : args.comment,
+                                   "ttl" : int(args.ttl),
+                                   "type" : args.type,
+                                   "data" : args.data               
+                                   } ]
+                    },
+                "link" : {
+                    "content" : "",
+                    "href" : args.server_href,
+                    "rel" : "cloudServersOpenStack"
+                }
+            }      
+        
+        return self._create_async(url, body, return_raw=False, response_key="")
 
     def modify(self, args, domainId):
         """
@@ -98,7 +119,30 @@ class RecordManager(base.ManagerWithFind):
             "data" : args.data,
             "priority" : args.priority                
         }
-        return self._update('/domains/%s/records/%s' % (base.getid(domainId), base.getid(args.record_id)) , body, return_raw=False, response_key="")
+        url = '/domains/%s/records/%s' % (base.getid(domainId), base.getid(args.record_id))
+        
+        if hasattr(args, 'type'):
+            if args.type == "PTR":
+                url = '/rdns'
+                body = {
+                        "recordsList" : {
+                                "records" : [ {
+                                   "name" : args.name,
+                                   "id" : args.record_id,
+                                   "comment" : args.comment,
+                                   "ttl" : int(args.ttl),
+                                   "type" : args.type,
+                                   "data" : args.data               
+                                   } ]
+                        },
+                        "link" : {
+                                  "content" : "",
+                                  "href" : args.server_href,
+                                  "rel" : "cloudServersOpenStack"
+                        }
+                }      
+
+        return self._update(url, body, return_raw=False, response_key="")
 
     def delete(self, domainId, recordId):
         """
@@ -108,3 +152,23 @@ class RecordManager(base.ManagerWithFind):
         :param recordId: The ID of the :class:`Record` to delete.
         """
         self._delete("/domains/%s/records/%s" % (base.getid(domainId), base.getid(recordId)))
+        
+    def rdns_list(self, href):     
+        """
+        List all PTR records configured for the specified Cloud device.
+
+        :param href: The href of the device to get .
+        :rtype: :class:`Record`
+        """
+        return self._list("/rdns/cloudServersOpenStack?href=%s" % href, "records") 
+
+    def rdns_delete(self, href, ip):
+        """
+        Remove one or all PTR records associated with a Rackspace Cloud device. 
+        Use the optional ip query parameter to specify a specific record to delete. 
+        Omitting this parameter removes all PTR records associated with the specified device.
+
+        :param href: The ID of the device to delete.
+        :param ip: The ip of the specific record to delete.
+        """
+        self._delete("/rdns/cloudServersOpenStack?href=%s&ip=%s" % (href, ip))
